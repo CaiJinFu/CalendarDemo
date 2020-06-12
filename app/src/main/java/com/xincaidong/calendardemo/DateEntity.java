@@ -19,7 +19,6 @@ public class DateEntity {
   private String day;
   /** 是否选中开始或者结束的日期 */
   private boolean isSelect;
-  private boolean isSelect2;
 
   private int selectStatus = NORMAL;
 
