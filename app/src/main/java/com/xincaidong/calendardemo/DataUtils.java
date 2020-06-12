@@ -37,17 +37,17 @@ public class DataUtils {
     cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
     for (int i = 0; i < 7; i++) {
       DateEntity entity = new DateEntity();
-      entity.date =
+      entity.setDate(
           getValue(cal.get(cal.YEAR))
               + "-"
               + getValue(cal.get(cal.MONTH) + 1)
               + "-"
-              + getValue(cal.get(cal.DATE));
-      entity.million = cal.getTimeInMillis();
-      entity.day = getValue(cal.get(cal.DATE));
-      entity.weekNum = cal.get(Calendar.DAY_OF_WEEK);
-      entity.weekName = getWeekName(entity.weekNum);
-      entity.isToday = isToday(entity.date);
+              + getValue(cal.get(cal.DATE)));
+      entity.setMillion(cal.getTimeInMillis());
+      entity.setDay(getValue(cal.get(cal.DATE)));
+      entity.setWeekNum(cal.get(Calendar.DAY_OF_WEEK));
+      entity.setWeekName(getWeekName(entity.getWeekNum()));
+      entity.setToday(isToday(entity.getDate()));
       cal.add(Calendar.DATE, 1);
       result.add(entity);
     }
@@ -74,31 +74,31 @@ public class DataUtils {
     Log.d(TAG, "当前月份最大天数: " + max);
     for (int i = 1; i <= max; i++) {
       DateEntity entity = new DateEntity();
-      entity.date =
-          getValue(cal.get(cal.YEAR))
-              + "-"
-              + getValue(cal.get(cal.MONTH) + 1)
-              + "-"
-              + getValue(cal.get(cal.DATE));
-      entity.million = cal.getTimeInMillis();
-      entity.weekNum = cal.get(Calendar.DAY_OF_WEEK);
-      entity.day = getValue(cal.get(cal.DATE));
-      entity.weekName = getWeekName(entity.weekNum);
-      entity.isToday = isToday(entity.date);
+      entity.setDate(getValue(cal.get(cal.YEAR))
+          + "-"
+          + getValue(cal.get(cal.MONTH) + 1)
+          + "-"
+          + getValue(cal.get(cal.DATE)));
+
+      entity.setMillion(cal.getTimeInMillis());
+      entity.setWeekNum(cal.get(Calendar.DAY_OF_WEEK));
+      entity.setDay(getValue(cal.get(cal.DATE)));
+      entity.setWeekName(getWeekName(entity.getWeekNum()));
+      entity.setToday(isToday(entity.getDate()));
       cal.add(Calendar.DATE, 1);
       result.add(entity);
       Log.d(TAG, "添加一天: " + entity);
     }
     // 为了用空的值填补第一个之前的日期
     // 先获取在本周内是周几
-    int weekNum = result.get(0).weekNum - 1;
+    int weekNum = result.get(0).getWeekNum() - 1;
     Log.d(TAG, "先获取在本周内是周几: " + weekNum);
     for (int j = 0; j < weekNum; j++) {
       DateEntity entity = new DateEntity();
       result.add(0, entity);
     }
     for (int i = 0; i < result.size(); i++) {
-      if (date.equals(result.get(i).date)) {
+      if (date.equals(result.get(i).getDate())) {
         selectPosition = i;
       }
     }
@@ -191,16 +191,18 @@ public class DataUtils {
     String str = formatter.format(curDate);
     return str;
   }
+
   /** 格式化日期 */
   public static String formatDate(String date, String format) {
-    SimpleDateFormat formatter = new SimpleDateFormat(format);
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
+    SimpleDateFormat formatter2 = new SimpleDateFormat(format);
     Date curDate = null; // 获取当前时间
     try {
       curDate = formatter.parse(date);
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    String str = formatter.format(curDate);
+    String str = formatter2.format(curDate);
     return str;
   }
 
@@ -224,6 +226,7 @@ public class DataUtils {
     String day = DataUtils.dateFormat.format(d);
     return day;
   }
+
   /**
    * 获取前/后 几个月的一个日期 切换月的时候用
    *
@@ -242,6 +245,4 @@ public class DataUtils {
     Date day = c.getTime();
     return new SimpleDateFormat("yyyy-MM-dd").format(day);
   }
-
-
 }
