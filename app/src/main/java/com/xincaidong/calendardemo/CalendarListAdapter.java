@@ -96,7 +96,7 @@ public class CalendarListAdapter extends BaseQuickAdapter<DateEntity, BaseViewHo
     }
     long million = item.getMillion();
     if (million == 0) {
-      // 星期日提示或者是空的日期
+      // 顶部标识星期日，星期一文字提示或者是空的日期填充需要单独处理
       item.setSelect(false);
       item.setSelectStatus(DateEntity.NORMAL);
       tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.color_999999));
