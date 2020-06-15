@@ -54,6 +54,7 @@ public class DataUtils {
 
     return result;
   }
+
   /**
    * 获取当前日期一月的日期
    *
@@ -143,6 +144,7 @@ public class DataUtils {
     }
     return name;
   }
+
   /**
    * 是否是今天
    *
@@ -189,7 +191,8 @@ public class DataUtils {
   /** 获取系统当前日期 */
   public static String getCurrDate(String format) {
     SimpleDateFormat formatter = new SimpleDateFormat(format);
-    Date curDate = new Date(System.currentTimeMillis()); // 获取当前时间
+    // 获取当前时间
+    Date curDate = new Date(System.currentTimeMillis());
     String str = formatter.format(curDate);
     return str;
   }
@@ -278,5 +281,10 @@ public class DataUtils {
     c.set(Calendar.MONTH, c.get(Calendar.MONTH) + monthNum);
     Date day = c.getTime();
     return new SimpleDateFormat("yyyy-MM-dd").format(day);
+  }
+
+  public static String formatDateTime(long dateTime) {
+    String format = new SimpleDateFormat("yyyy-MM-dd").format(new Date(dateTime));
+    return format;
   }
 }

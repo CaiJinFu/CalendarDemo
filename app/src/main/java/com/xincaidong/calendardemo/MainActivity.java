@@ -2,32 +2,35 @@ package com.xincaidong.calendardemo;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
+import com.xincaidong.calendardemo.databinding.ActivityMainBinding;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-  private ImageView mIvLast;
   private TextView mTvTime;
-  private ImageView mIvNext;
   private RecyclerView mRV;
   private CalendarListAdapter mAdapter;
   private ArrayList<DateEntity> mDateEntities;
   private String currentMonth;
+  private ActivityMainBinding mInflate;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    LayoutInflater from = LayoutInflater.from(this);
+    mInflate = ActivityMainBinding.inflate(from);
+    setContentView(mInflate.getRoot());
     initView();
     initData();
   }
@@ -74,37 +77,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<DateEntity> dateEntities = new ArrayList<>();
     dateEntities.addAll(mDateEntities);
     ArrayList<DateEntity> months = DataUtils.getMonth("" + LocalDate.now());
-    //months.get(2).setSelect(true);
-    //months.get(2).setSelectStatus(DateEntity.START);
-    //months.get(3).setSelectStatus(DateEntity.RANGE);
-    //months.get(4).setSelectStatus(DateEntity.RANGE);
-    //months.get(5).setSelectStatus(DateEntity.RANGE);
-    //months.get(6).setSelectStatus(DateEntity.RANGE);
-    //months.get(7).setSelect(true);
-    //months.get(7).setSelectStatus(DateEntity.END);
+    // months.get(2).setSelect(true);
+    // months.get(2).setSelectStatus(DateEntity.START);
+    // months.get(3).setSelectStatus(DateEntity.RANGE);
+    // months.get(4).setSelectStatus(DateEntity.RANGE);
+    // months.get(5).setSelectStatus(DateEntity.RANGE);
+    // months.get(6).setSelectStatus(DateEntity.RANGE);
+    // months.get(7).setSelect(true);
+    // months.get(7).setSelectStatus(DateEntity.END);
     dateEntities.addAll(months);
     mAdapter.setList(dateEntities);
   }
 
-
-
   private void initView() {
-    mIvLast = (ImageView) findViewById(R.id.ivLast);
-    mIvLast.setOnClickListener(this);
-    mTvTime = (TextView) findViewById(R.id.tvTime);
-    mIvNext = (ImageView) findViewById(R.id.ivNext);
-    mIvNext.setOnClickListener(this);
-    mRV = (RecyclerView) findViewById(R.id.recycleView);
+    mInflate.ivLast.setOnClickListener(this);
+    mInflate.ivNext.setOnClickListener(this);
+    mInflate.btn.setOnClickListener(this);
+    mTvTime = mInflate.tvTime;
+    mRV = mInflate.recycleView;
     mAdapter = new CalendarListAdapter();
     mRV.setLayoutManager(new GridLayoutManager(this, 7));
     mRV.setAdapter(mAdapter);
     if (mRV.getItemAnimator() != null) {
       ((SimpleItemAnimator) mRV.getItemAnimator()).setSupportsChangeAnimations(false);
     }
-    mAdapter.setOnItemClickListener(
-        (adapter, view, position) -> {
-
-        });
+    mAdapter.setOnItemClickListener((adapter, view, position) -> {});
   }
 
   @Override
@@ -112,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<DateEntity> dateEntities;
     switch (v.getId()) {
       case R.id.ivLast:
+        // 上个月
         currentMonth = DataUtils.getSomeMonthDay(mTvTime.getText().toString(), -1);
         mTvTime.setText(DataUtils.formatDate(currentMonth, "yyyy-MM"));
         dateEntities = new ArrayList<>();
@@ -120,12 +118,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAdapter.setList(dateEntities);
         break;
       case R.id.ivNext:
+        // 下个月
         currentMonth = DataUtils.getSomeMonthDay(mTvTime.getText().toString(), +1);
         mTvTime.setText(DataUtils.formatDate(currentMonth, "yyyy-MM"));
         dateEntities = new ArrayList<>();
         dateEntities.addAll(mDateEntities);
         dateEntities.addAll(DataUtils.getMonth(currentMonth));
         mAdapter.setList(dateEntities);
+        break;
+      case R.id.btn:
+        // 获取开始结束时间
+        HashMap<Integer, DateEntity> hashMap = mAdapter.getHashMap();
+        String start = "";
+        String end = "";
+        DateEntity entityStart = hashMap.get(DateEntity.START);
+        if (entityStart != null) {
+          long million = entityStart.getMillion();
+          start = DataUtils.formatDateTime(million);
+        }
+        DateEntity dateEntity = hashMap.get(DateEntity.END);
+        if (dateEntity != null) {
+          long million = dateEntity.getMillion();
+          end = DataUtils.formatDateTime(million);
+        }
+        mInflate.tvShowTime.setText("开始时间为：" + start + ",结束时间为：" + end);
         break;
       default:
         break;

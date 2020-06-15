@@ -18,7 +18,9 @@ public class CalendarListAdapter extends BaseQuickAdapter<DateEntity, BaseViewHo
 
   private HashMap<Integer, DateEntity> mHashMap = new HashMap<>();
 
-  public void setNewData() {}
+  public HashMap<Integer, DateEntity> getHashMap() {
+    return mHashMap;
+  }
 
   @Override
   protected void setOnItemClick(@NotNull View v, int position) {
@@ -59,12 +61,16 @@ public class CalendarListAdapter extends BaseQuickAdapter<DateEntity, BaseViewHo
         }
         resetStartSelect(item);
       }
-      Log.d(TAG, "onItemClick: a" + item.getDay());
+      Log.d(TAG, "点击的日期: " + item.getDay());
     }
-    Log.d(TAG, "onItemClick: a" + position);
   }
 
+  /**
+   * 重置所有的日期bean为初始值，并设置开始的日期
+   * @param item 点击的日期
+   */
   private void resetStartSelect(DateEntity item) {
+    //清除之前选择的日期
     if (mHashMap.size() > 0) {
       mHashMap.clear();
     }
@@ -155,12 +161,12 @@ public class CalendarListAdapter extends BaseQuickAdapter<DateEntity, BaseViewHo
         }
       }
     }
-
+    // 设置开始或者结束选择的背景
     if (item.isSelect()) {
       tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.color_white));
       tvDay.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.bg_select_day));
     }
-
+    // 处理不同的状态背景
     switch (item.getSelectStatus()) {
       case DateEntity.START:
         // 选择日期开始
