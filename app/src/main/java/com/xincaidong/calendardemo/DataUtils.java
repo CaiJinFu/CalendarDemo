@@ -74,17 +74,18 @@ public class DataUtils {
     Log.d(TAG, "当前月份最大天数: " + max);
     for (int i = 1; i <= max; i++) {
       DateEntity entity = new DateEntity();
-      entity.setDate(getValue(cal.get(cal.YEAR))
-          + "-"
-          + getValue(cal.get(cal.MONTH) + 1)
-          + "-"
-          + getValue(cal.get(cal.DATE)));
-
+      entity.setDate(
+          getValue(cal.get(cal.YEAR))
+              + "-"
+              + getValue(cal.get(cal.MONTH) + 1)
+              + "-"
+              + getValue(cal.get(cal.DATE)));
       entity.setMillion(cal.getTimeInMillis());
       entity.setWeekNum(cal.get(Calendar.DAY_OF_WEEK));
       entity.setDay(getValue(cal.get(cal.DATE)));
       entity.setWeekName(getWeekName(entity.getWeekNum()));
       entity.setToday(isToday(entity.getDate()));
+
       cal.add(Calendar.DATE, 1);
       result.add(entity);
       Log.d(TAG, "添加一天: " + entity);
@@ -104,6 +105,7 @@ public class DataUtils {
     }
     return result;
   }
+
   /**
    * 根据美式周末到周一 返回
    *
@@ -225,6 +227,38 @@ public class DataUtils {
     Date d = c.getTime();
     String day = DataUtils.dateFormat.format(d);
     return day;
+  }
+
+  /**
+   * 比较两个日期哪个更靠后一些
+   *
+   * @param time1 时间
+   * @param time2 时间
+   * @return true：time2在time1的后面，false：time2在time1的前面
+   */
+  public static boolean after(long time1, long time2) {
+    Calendar c = Calendar.getInstance();
+    Calendar d = Calendar.getInstance();
+    c.setTimeInMillis(time1);
+    d.setTimeInMillis(time2);
+    Log.i("MainActivityFilter", "d在c后面：" + d.after(c));
+    return d.after(c);
+  }
+
+  /**
+   * 判断两个日期哪个更靠前
+   *
+   * @param time1 时间
+   * @param time2 时间
+   * @return true：time1在time2的前面，false：time1在time2的后面
+   */
+  public static boolean before(long time1, long time2) {
+    Calendar c = Calendar.getInstance();
+    Calendar d = Calendar.getInstance();
+    c.setTimeInMillis(time1);
+    d.setTimeInMillis(time2);
+    Log.i("MainActivityFilter", "c在d前面：" + c.before(d));
+    return c.before(d);
   }
 
   /**

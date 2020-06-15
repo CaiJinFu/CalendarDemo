@@ -5,13 +5,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -77,17 +74,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<DateEntity> dateEntities = new ArrayList<>();
     dateEntities.addAll(mDateEntities);
     ArrayList<DateEntity> months = DataUtils.getMonth("" + LocalDate.now());
-    months.get(2).setSelect(true);
-    months.get(2).setSelectStatus(DateEntity.START);
-    months.get(3).setSelectStatus(DateEntity.RANGE);
-    months.get(4).setSelectStatus(DateEntity.RANGE);
-    months.get(5).setSelectStatus(DateEntity.RANGE);
-    months.get(6).setSelectStatus(DateEntity.RANGE);
-    months.get(7).setSelect(true);
-    months.get(7).setSelectStatus(DateEntity.END);
+    //months.get(2).setSelect(true);
+    //months.get(2).setSelectStatus(DateEntity.START);
+    //months.get(3).setSelectStatus(DateEntity.RANGE);
+    //months.get(4).setSelectStatus(DateEntity.RANGE);
+    //months.get(5).setSelectStatus(DateEntity.RANGE);
+    //months.get(6).setSelectStatus(DateEntity.RANGE);
+    //months.get(7).setSelect(true);
+    //months.get(7).setSelectStatus(DateEntity.END);
     dateEntities.addAll(months);
     mAdapter.setList(dateEntities);
   }
+
+
 
   private void initView() {
     mIvLast = (ImageView) findViewById(R.id.ivLast);
@@ -103,21 +102,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       ((SimpleItemAnimator) mRV.getItemAnimator()).setSupportsChangeAnimations(false);
     }
     mAdapter.setOnItemClickListener(
-        new OnItemClickListener() {
-          @Override
-          public void onItemClick(
-              @NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-            DateEntity item = mAdapter.getItem(position);
-            if (item != null) {
-              Log.d(TAG, "onItemClick: a" + item.getDay());
-            }
-          }
+        (adapter, view, position) -> {
+
         });
   }
 
   @Override
   public void onClick(View v) {
-
     ArrayList<DateEntity> dateEntities;
     switch (v.getId()) {
       case R.id.ivLast:
