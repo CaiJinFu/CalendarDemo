@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class CalendarListAdapter extends BaseQuickAdapter<DateEntity, BaseViewHolder> {
 
+  private long currentTimeMillis = System.currentTimeMillis();
+
   public CalendarListAdapter() {
     super(R.layout.recycler_item_calendar_list);
   }
@@ -28,6 +30,10 @@ public class CalendarListAdapter extends BaseQuickAdapter<DateEntity, BaseViewHo
     DateEntity item = getItem(position);
     if (item != null) {
       if (item.getMillion() == 0) {
+        return;
+      }
+      //超过当天日期的不能选
+      if (DataUtils.after(currentTimeMillis, item.getMillion())) {
         return;
       }
       if (item.isSelect()) {
@@ -67,10 +73,11 @@ public class CalendarListAdapter extends BaseQuickAdapter<DateEntity, BaseViewHo
 
   /**
    * 重置所有的日期bean为初始值，并设置开始的日期
+   *
    * @param item 点击的日期
    */
   private void resetStartSelect(DateEntity item) {
-    //清除之前选择的日期
+    // 清除之前选择的日期
     if (mHashMap.size() > 0) {
       mHashMap.clear();
     }
