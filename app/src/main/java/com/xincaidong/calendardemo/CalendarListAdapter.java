@@ -189,7 +189,7 @@ public class CalendarListAdapter extends BaseQuickAdapter<DateEntity, BaseViewHo
         tvLeftBg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_FFF0F0));
         tvRightBg.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_FFF0F0));
         tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.color_666666));
-        tvDay.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.color_FFF0F0));
+        tvDay.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.bg_transparent));
         break;
       case DateEntity.NORMAL:
         // 不在选中范围内日期
