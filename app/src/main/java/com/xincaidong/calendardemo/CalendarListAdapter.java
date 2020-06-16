@@ -32,7 +32,7 @@ public class CalendarListAdapter extends BaseQuickAdapter<DateEntity, BaseViewHo
       if (item.getMillion() == 0) {
         return;
       }
-      //超过当天日期的不能选
+      // 超过当天日期的不能选
       if (DataUtils.after(currentTimeMillis, item.getMillion())) {
         return;
       }
